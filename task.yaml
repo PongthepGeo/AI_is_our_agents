@@ -1,0 +1,29 @@
+# Task Configuration
+
+# Available Models
+available_models:
+  - claude-3-5-sonnet-20241022  # Best for coding and complex tasks
+  - claude-3-opus-20240229      # Best for reasoning and analysis
+  - claude-3-haiku-20240307     # Fast and efficient responses
+  - claude-3-sonnet-20240229    # Balanced performance
+
+# Selected model
+model: claude-3-5-sonnet-20241022
+
+# Model Modes: coding, analytical, creative, fast
+model_type: coding
+
+# System Prompt
+system_prompt: geophysics expert.
+
+# Output Configuration
+save_log: output_geo_2.md
+
+# Task Description
+task: |
+  1) Create Python linear regression.
+  2) Create Python polynomial regression.
+  3) Show both fit.
+
+# Metadata Settings
+include_metadata: true
