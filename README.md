@@ -2,13 +2,21 @@
 
 A Python-based AI agent specialized in geoscience research, satellite data analysis, and scientific publication writing. Built with Anthropic's Claude models tailored specifically for geophysics (including mineral and petroleum exploration), geology, and earth observation workflows.
 
+## 📊 Overview
+
+<img src="overview.svg" alt="Overview" width="100%" />
+
+*Interactive workflow diagram available at: https://boardmix.com/app/share/CAE.CKqMjAEgASoQK-glKOYYTmbWISTukdYbhTAGQAE/Yx6Vou*
+
 ---
 
 ## 🚀 Quick Start
 
-### 1. Prerequisites
+### 1. Installation
 
 ```bash
+git clone https://github.com/PongthepGeo/AI_is_our_agents.git
+cd AI_is_our_agents/02_ai_agent
 pip install -r requirements.txt
 ```
 
