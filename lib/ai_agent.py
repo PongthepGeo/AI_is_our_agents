@@ -40,19 +40,33 @@ class ProgressIndicator:
 class ClaudeAgent:
     def __init__(self, api_key: Optional[str] = None):
         """Initialize Claude agent with API key"""
-        self.api_key = "change here"
+        # Hardcoded API key - change this to your actual key
+        self.api_key = "change_here"  # <-- Put your API key here
         
-        self.client = anthropic.Anthropic(api_key=self.api_key)
-
-        ''' 
-        1) Claude 3.5 Sonnet - Best for coding and complex tasks
-        2) Claude 3 Opus - Best for reasoning and analysis
-        3) Claude 3 Haiku - Fast and efficient responses
-        4) Claude 3 Sonnet - Balanced performance
-        '''
+        # Terminate if no API key found or still has placeholder
+        if not self.api_key or self.api_key == "change_here":
+            print("❌ ERROR: No API key found!")
+            print("Please update the hardcoded API key in the __init__ method.")
+            print("Replace 'change_here' with your actual Anthropic API key.")
+            sys.exit(1)
+        
+        # Validate API key format (basic check)
+        if not self.api_key.startswith('sk-ant-api'):
+            print("❌ ERROR: Invalid API key format!")
+            print("Anthropic API keys should start with 'sk-ant-api'")
+            sys.exit(1)
+        
+        try:
+            self.client = anthropic.Anthropic(api_key=self.api_key)
+            print("✅ Claude agent initialized successfully!")
+        except Exception as e:
+            print(f"❌ ERROR: Failed to initialize Claude client: {e}")
+            sys.exit(1)
+        
+        # Updated model configurations for 2024
         self.available_models = {
             "claude-3-5-sonnet-20241022",
-            "claude-3-opus-20240229",
+            "claude-3-opus-20240229", 
             "claude-3-haiku-20240307",
             "claude-3-sonnet-20240229"
         }
@@ -85,9 +99,43 @@ class ClaudeAgent:
             }
         }
         
-        # Re‑organized system prompts (five entries)
-
-        self.system_prompts = {"custom": "You are a helpful AI assistant."}
+        # System prompts
+        self.system_prompts = {
+            "custom": "You are a helpful AI assistant.",
+            "coding": "You are an expert programmer. Provide clean, efficient, and well-documented code.",
+            "creative": "You are a creative writing assistant. Help with storytelling, brainstorming, and creative projects.",
+            "analytical": "You are an analytical expert. Provide thorough analysis and logical reasoning.",
+            "fast": "You are a quick-response assistant. Provide concise and direct answers."
+        }
+    
+    def get_model_info(self, model_type: str = "coding") -> dict:
+        """Get model configuration for specified type"""
+        if model_type not in self.model_types:
+            print(f"❌ Unknown model type: {model_type}")
+            print(f"Available types: {list(self.model_types.keys())}")
+            return self.model_types["coding"]  # Default fallback
+        
+        return self.model_types[model_type]
+    
+    def chat(self, message: str, model_type: str = "coding", custom_model: str = None) -> str:
+        """Send a message to Claude and get response"""
+        try:
+            config = self.get_model_info(model_type)
+            model = custom_model or config["default_model"]
+            
+            response = self.client.messages.create(
+                model=model,
+                max_tokens=config["max_tokens"],
+                temperature=config["temperature"],
+                system=self.system_prompts.get(model_type, self.system_prompts["custom"]),
+                messages=[{"role": "user", "content": message}]
+            )
+            
+            return response.content[0].text
+            
+        except Exception as e:
+            print(f"❌ ERROR: Failed to get response from Claude: {e}")
+            return None
 
     def create_response(self, task: str, model: str, model_type: str = "coding", system_prompt: Optional[str] = None) -> str:
         """Create a response using Claude with specified configuration"""

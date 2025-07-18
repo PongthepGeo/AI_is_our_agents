@@ -14,16 +14,16 @@ model: claude-3-5-sonnet-20241022
 model_type: coding
 
 # System Prompt
-system_prompt: geophysics expert.
+system_prompt: good on coding.
 
 # Output Configuration
-save_log: output_geo_2.md
+save_log: output_regression.md
 
 # Task Description
 task: |
   1) Create Python linear regression.
   2) Create Python polynomial regression.
-  3) Show both fit.
+  3) Compare and show both fit.
 
 # Metadata Settings
 include_metadata: true
